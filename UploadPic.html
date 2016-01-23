@@ -1,30 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Facebook Login JavaScript Example</title>
-<meta charset="UTF-8">
-</head>
+function publishFacebook(){
+    console.log('dentro publish');
 
-<body>
-<script type="text/javascript">  
-  <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '940208782701422',
-      xfbml      : true,
-      version    : 'v2.5'
-       channelUrl  : '<http://lucasbullen.github.io/proViralPicture/UploadPic.html>channel.php'
+    var dataURL = canvas.toDataURL('image/png');
+    var onlyData = dataURL.substring(dataURL.indexOf(',')+1);
+    var decoded = atob(onlyData);
+
+    var dl = decoded.length;
+
+    var buffer = new Uint8Array(dl);
+
+    for (var i = 0; i < dl; i++) {
+        buffer[i] = decoded.charCodeAt(i);
+    };
+
+    var blob = new Blob([buffer], {type: 'image/png'});
+
+    var formData = new FormData();
+
+    formData.append('source', blob);
+    formData.append('message', 'Whatever message we decide');
+
+    FB.api('/me/photos', 'POST', formData, function(resp) {
+        console.log('into function');
+        if (resp && !resp.error) {
+            console.log('uploaded');
+            console.log(resp);
+        } else {
+            console.log('some error');
+            console.log(resp.error);
+        };
     });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
-  
-    </body>
-</html>
+};
