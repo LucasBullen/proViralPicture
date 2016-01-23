@@ -1,66 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Facebook Login JavaScript Example</title>
+<title>Upload file to FB in Javascript</title>
 <meta charset="UTF-8">
 </head>
+
 <body>
+<script type="text/javascript">  
 
 
-
-<div id="fb-root"></div>
-
-<script>
-
-if ( XMLHttpRequest.prototype.sendAsBinary === undefined ) {
-    XMLHttpRequest.prototype.sendAsBinary = function(string) {
-        var bytes = Array.prototype.map.call(string, function(c) {
-            return c.charCodeAt(0) & 0xff;
-        });
-        this.send(new Uint8Array(bytes).buffer);
-    };
+    var imgURL="http://farm4.staticflickr.com/3332/3451193407_b7f047f4b4_o.jpg";//change with your external photo url
+FB.api('/album_id/photos','post',{
+    message:'photo description',
+    url:imgURL        
+},function(response){if(!response || response.error){
+        alert('Error occured');}else{
+        alert('Post ID: '+ response.id);}});
+and SECOND one using jQuery Post request and FormData
 }
 
-// This function takes an array of bytes that are the actual contents of the image file.
-// In other words, if you were to look at the contents of imageData as characters, they'd
-// look like the contents of a PNG or GIF or what have you.  For instance, you might use
-// pnglib.js to generate a PNG and then upload it to Facebook, all from the client.
-//
-// Arguments:
-//   authToken - the user's auth token, usually from something like authResponse.accessToken
-//   filename - the filename you'd like the uploaded file to have
-//   mimeType - the mime type of the file, eg: image/png
-//   imageData - an array of bytes containing the image file contents
-//   message - an optional message you'd like associated with the image
 
-function PostImageToFacebook( authToken, filename, mimeType, imageData, message )
-{
-    // this is the multipart/form-data boundary we'll use
-    var boundary = '----ThisIsTheBoundary1234567890';
-    
-    // let's encode our image file, which is contained in the var
-    var formData = '--' + boundary + '\r\n'
-    formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n';
-    formData += 'Content-Type: ' + mimeType + '\r\n\r\n';
-    for ( var i = 0; i < imageData.length; ++i )
-    {
-        formData += String.fromCharCode( imageData[ i ] & 0xff );
-    }
-    formData += '\r\n';
-    formData += '--' + boundary + '\r\n';
-    formData += 'Content-Disposition: form-data; name="message"\r\n\r\n';
-    formData += message + '\r\n'
-    formData += '--' + boundary + '--\r\n';
-    
-    var xhr = new XMLHttpRequest();
-    xhr.open( 'POST', 'https://graph.facebook.com/me/photos?access_token=' + authToken, true );
-    xhr.onload = xhr.onerror = function() {
-        console.log( xhr.responseText );
-    };
-    xhr.setRequestHeader( "Content-Type", "multipart/form-data; boundary=" + boundary );
-    xhr.sendAsBinary( formData );
-}
-</script>
-
+ </script>
     </body>
 </html>
