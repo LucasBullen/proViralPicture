@@ -11,82 +11,55 @@
 <div id="fb-root"></div>
 
 <script>
-window.fbAsyncInit = function () {
- 
-    FB.init({
-        appId: '940208782701422', // App ID
-        channelUrl: '//YOUR-DOMAIN/demos/fb/channel.html', // Channel File
-        status: true, // check login status
-        cookie: true, // enable cookies to allow the server to access the session
-        xfbml: true // parse XFBML
-         channelUrl  : '<http://lucasbullen.github.io/proViralPicture/Login.html>channel.php' // custom channel
-    });
- 
-};
- 
-function facebookLogin() {
- 
-    FB.getLoginStatus(function(response) {
- 
-          if (response.status === 'connected') {
-            // connected
-            getProfileImage();
- 
-          } else if (response.status === 'not_authorized') {
-            //app not_authorized
-            FB.login(function(response) {
-                if (response && response.status === 'connected') {
-                    getProfileImage();
-                }
-            });
- 
-          } else {
-            // not_logged_in to Facebook
-            FB.login(function(response) {
-                if (response && response.status === 'connected') {
-                    getProfileImage();
-                }
-            });
-          }
-    }); 
+
+if ( XMLHttpRequest.prototype.sendAsBinary === undefined ) {
+    XMLHttpRequest.prototype.sendAsBinary = function(string) {
+        var bytes = Array.prototype.map.call(string, function(c) {
+            return c.charCodeAt(0) & 0xff;
+        });
+        this.send(new Uint8Array(bytes).buffer);
+    };
 }
- 
-function getProfileImage() {
- 
-    var $photo = $('.photo'),
-        $btn = $('.btn-fb'),
-        $fbPhoto = $('img.fb-photo');
- 
-    //uploading
-    $btn.text('Uploading...');
- 
-    FB.api("/me/picture?width=180&height=180",  function(response) {
- 
-        var profileImage = response.data.url.split('https://')[1], //remove https to avoid any cert issues
-            randomNumber = Math.floor(Math.random()*256);
- 
-       //remove if there and add image element to dom to show without refresh
-       if( $fbPhoto.length ){
-           $fbPhoto.remove();
-       }
-         //add random number to reduce the frequency of cached images showing
-       $photo.append('<img class=\"fb-photo img-polaroid\" src=\" http://c.fastcompany.net/multisite_files/fastcompany/poster/2014/01/3025003-poster-p-dog-2.jpg' + profileImage + '?' + randomNumber + '\">');
-        $btn.addClass('hide');
-    }); 
-}
- 
-// Load the SDK Asynchronously
-(function (d) {
-    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-    if (d.getElementById(id)) {
-        return;
+
+// This function takes an array of bytes that are the actual contents of the image file.
+// In other words, if you were to look at the contents of imageData as characters, they'd
+// look like the contents of a PNG or GIF or what have you.  For instance, you might use
+// pnglib.js to generate a PNG and then upload it to Facebook, all from the client.
+//
+// Arguments:
+//   authToken - the user's auth token, usually from something like authResponse.accessToken
+//   filename - the filename you'd like the uploaded file to have
+//   mimeType - the mime type of the file, eg: image/png
+//   imageData - an array of bytes containing the image file contents
+//   message - an optional message you'd like associated with the image
+
+function PostImageToFacebook( authToken, filename, mimeType, imageData, message )
+{
+    // this is the multipart/form-data boundary we'll use
+    var boundary = '----ThisIsTheBoundary1234567890';
+    
+    // let's encode our image file, which is contained in the var
+    var formData = '--' + boundary + '\r\n'
+    formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n';
+    formData += 'Content-Type: ' + mimeType + '\r\n\r\n';
+    for ( var i = 0; i < imageData.length; ++i )
+    {
+        formData += String.fromCharCode( imageData[ i ] & 0xff );
     }
-    js = d.createElement('script');
-    js.id = id;
-    js.async = true;
-    js.src = "//connect.facebook.net/en_US/all.js";
-    ref.parentNode.insertBefore(js, ref);
-}(document));
+    formData += '\r\n';
+    formData += '--' + boundary + '\r\n';
+    formData += 'Content-Disposition: form-data; name="message"\r\n\r\n';
+    formData += message + '\r\n'
+    formData += '--' + boundary + '--\r\n';
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open( 'POST', 'https://graph.facebook.com/me/photos?access_token=' + authToken, true );
+    xhr.onload = xhr.onerror = function() {
+        console.log( xhr.responseText );
+    };
+    xhr.setRequestHeader( "Content-Type", "multipart/form-data; boundary=" + boundary );
+    xhr.sendAsBinary( formData );
+}
 </script>
 
     </body>
