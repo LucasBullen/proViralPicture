@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<script type="text/javascript">  
+  <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '940208782701422',
+      xfbml      : true,
+      version    : 'v2.5'
+       channelUrl  : '<http://lucasbullen.github.io/proViralPicture/UploadPic.html>channel.php'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+  
+    </body>
+</html>
