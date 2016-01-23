@@ -24,7 +24,32 @@ window.fbAsyncInit = function () {
  
 };
  
-
+/*function facebookLogin() {
+ 
+    FB.getLoginStatus(function(response) {
+ 
+          if (response.status === 'connected') {
+            // connected
+            getProfileImage();
+ 
+          } else if (response.status === 'not_authorized') {
+            //app not_authorized
+            FB.login(function(response) {
+                if (response && response.status === 'connected') {
+                    getProfileImage();
+                }
+            });
+ 
+          } else {
+            // not_logged_in to Facebook
+            FB.login(function(response) {
+                if (response && response.status === 'connected') {
+                    getProfileImage();
+                }
+            });
+          }
+    }); 
+}*/
  
 function getProfileImage() {
  
@@ -45,7 +70,7 @@ function getProfileImage() {
            $fbPhoto.remove();
        }
          //add random number to reduce the frequency of cached images showing
-       $photo.append('<img class=\"fb-photo img-polaroid\" src=\"http://' + profileImage + '?' + randomNumber + '\">');
+       $photo.append('<img class=\"fb-photo img-polaroid\" src=\" http://c.fastcompany.net/multisite_files/fastcompany/poster/2014/01/3025003-poster-p-dog-2.jpg' + profileImage + '?' + randomNumber + '\">');
         $btn.addClass('hide');
     }); 
 }
