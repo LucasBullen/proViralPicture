@@ -48,6 +48,41 @@ function doSomething() {
 //  postFeed();
 //  showFriends();
 }
+
+
+function amILoggedIn(){
+        var toreturn = "";
+        FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+                window.userId =  response.authResponse.userID;
+            toreturn = "GetLoginStatus: logged in" + " " + "<?php echo $user; ?>";
+            } else {
+            toreturn = "GetLoginStatus: Logged Out";
+            }
+            console.log(toreturn);
+        }); 
+    };
+    // Load the SDK asynchronously
+    (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+            var obj = {
+                    method: 'feed',
+                    link: 'http://www.google.com'
+                };
+    $(".loginPopupButton").click(function(){
+         FB.login(function(response) {
+            FB.api('/me', function(response) { //user-specific stuff
+               console.log(response.id);
+             });
+         });
+    });
+
+    
 // UPLOAD A LOCAL IMAGE FILE, BUT THIS CAN NOT BE DONE WITHOUT USER'S MANUAL OPERATION BECAUSE OF SECURITY REASONS
 function fileUpload() {
   FB.api('/me/albums', function(response) {
@@ -55,16 +90,14 @@ function fileUpload() {
     var action_url = 'https://graph.facebook.com/' + album.id + '/photos?access_token=' +  accessToken;
     var form = document.getElementById('upload-photo-form');
     form.setAttribute('action', action_url);
-
     // This does not work because of security reasons. Choose the local file manually.
     // var file = document.getElementById('upload-photo-form-file');
     // file.setAttribute('value', "/Users/nseo/Desktop/test_title_03.gif")
-
     form.submit();
   });
 }
 // POST A IMAGE WITH DIALOG using FB.api
-/*function postImage1() {
+function postImage1() {
   var wallPost = {
     message: "test post photo",
     picture: "http://www.photographyblogger.net/wp-content/uploads/2010/05/flower29.jpg"
@@ -118,7 +151,7 @@ var e = document.createElement('script');
 e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
 e.async = true;
 document.getElementById('fb-root').appendChild(e);
-}()); */
+}());
 </script>
 </body>
 </html>
