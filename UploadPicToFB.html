@@ -2,21 +2,67 @@
 <html>
 <head>
 <title>Upload file to FB in Javascript</title>
+
 <meta charset="UTF-8">
 </head>
 
 <body>
 <script type="text/javascript">  
 
-        var imgURL = 'http://media.zenfs.com/en-US/video/video.pd2upload.com/video.yahoofinance.com@fc01f40d-8f4e-3cbc-9d8f-a7b9e79d95fd_FULL.jpg' //your external photo url         FB.api('/photos', 'post', {
-            message: 'photo description',             access_token: your accesstoken              url: imgURL         }, function (response) {
-             if (!response || response.error) {
-                alert('Error occured:' + response);
-            }
-else {
-                alert('Post ID: ' + response.id);
-            }
-         });
+//imageData is a base64 encoded JPG
+function postSocial(imageData, message){       
+        var ia = toUInt8Array(imageData);
+        postImageToFacebook(mAccessTokenPage, "imageName", "image/jpeg",ia, message);
+}
+
+function toUInt8Array(dataURI) {
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs
+        var byteString = window.atob(dataURI);
+
+        // write the bytes of the string to an ArrayBuffer
+        //var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return ia;
+    }
+
+function postImageToFacebook( authToken, filename, mimeType, imageData, message ) {        
+        // this is the multipart/form-data boundary we'll use
+        var boundary = '----ThisIsTheBoundary1234567890';
+
+        // let's encode our image file, which is contained in the var
+        var formData = '--' + boundary + '\r\n'
+        formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n';
+        formData += 'Content-Type: ' + mimeType + '\r\n\r\n';
+        for ( var i = 0; i < imageData.length; ++i )
+        {
+            formData += String.fromCharCode( imageData[ i ] & 0xff );
+        }
+        formData += '\r\n';
+        formData += '--' + boundary + '\r\n';
+        formData += 'Content-Disposition: form-data; name="message"\r\n\r\n';
+        formData += message + '\r\n'
+        formData += '--' + boundary + '--\r\n';
+
+        var xhr = new XMLHttpRequest();
+        xhr.open( 'POST', https://graph.facebook.com/ + {PAGE_ID} + "/photos?access_token=" + authToken, true );
+        xhr.onload = function() {
+            // ... Fill in your own
+            //Image was posted 
+           console.log(xhr.responseText);
+        };
+        xhr.onerror = function(){
+            console.log("Error while sending the image to Facebook");
+        };
+        xhr.setRequestHeader( "Content-Type", "multipart/form-data; boundary=" + boundary );
+        xhr.sendAsBinary( formData );
+    }
+
+
+
 
 
  </script>
