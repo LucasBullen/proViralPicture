@@ -7,19 +7,15 @@
 
 <body>
 <script type="text/javascript">  
-
         window.fbAsyncInit = function() {
             FB.init({
                 appId  : '<940208782701422>',
                 status : true, // check login status
                 cookie : true, // enable cookies to allow the server to access the session
                 xfbml  : true,
-                channelUrl  : '<http://lucasbullen.github.io/proViralPicture/Login.html>channel.php' // custom channel
-            });
-
+                // custom channel
+            }); channelUrl  : '<http://lucasbullen.github.io/proViralPicture/Login.html>channel.php'
     }; 
-
-
     //Get Login Status
     function amILoggedIn(){
         var toreturn = "";
@@ -32,11 +28,7 @@
             }
             console.log(toreturn);
         }); 
-
-
     };
-
-
     // Load the SDK asynchronously
     (function(d, s, id){
          var js, fjs = d.getElementsByTagName(s)[0];
@@ -45,22 +37,17 @@
          js.src = "//connect.facebook.net/en_US/all.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
-
             var obj = {
                     method: 'feed',
                     link: 'http://www.google.com'
                 };
-
-
     $(".loginPopupButton").click(function(){
          FB.login(function(response) {
             FB.api('/me', function(response) { //user-specific stuff
                console.log(response.id);
              });
          });
-
     });
-
     </script>
     </body>
 </html>
