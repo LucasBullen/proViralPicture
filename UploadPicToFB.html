@@ -16,16 +16,7 @@
 		      version    : 'v2.5',
 		       channelUrl  : '<http://lucasbullen.github.io/proViralPicture/Login.html>channel.php'
 		    });
-		    FB.getLoginStatus(function(response) {
-		    	if (response.status === 'connected') {
-		    		document.getElementById('status').innerHTML = 'We are connected.';
-		    		document.getElementById('login').style.visibility = 'hidden';
-		    	} else if (response.status === 'not_authorized') {
-		    		document.getElementById('status').innerHTML = 'We are not logged in.'
-		    	} else {
-		    		document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
-		    	}
-		    });
+		   
 		};
 		(function(d, s, id){
 		    var js, fjs = d.getElementsByTagName(s)[0];
@@ -47,11 +38,7 @@
 		    	}
 			}, {scope: 'publish_actions'});
 		}
-		// getting basic user info
-		function getInfo() {
-			FB.api('/me', 'GET', {fields: 'first_name,last_name,name,id'}, function(response) {
-				document.getElementById('status').innerHTML = response.id;
-			});
+	
 		}
 		// uploading photo on user timeline
 		function uploadPhoto() {
@@ -67,7 +54,6 @@
 
 	<div id="status"></div>
 	<button onclick="uploadPhoto()">Upload Photo</button>
-	<button onclick="getInfo()">Get Info</button>
-	<button onclick="login()" id="login">Login</button>
+
 </body>
 </html>
