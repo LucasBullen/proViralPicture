@@ -8,16 +8,15 @@
 <body>
 <script type="text/javascript">  
 
-
-    var imgURL="http://farm4.staticflickr.com/3332/3451193407_b7f047f4b4_o.jpg";//change with your external photo url
-FB.api('/album_id/photos','post',{
-    message:'photo description',
-    url:imgURL        
-},function(response){if(!response || response.error){
-        alert('Error occured');}else{
-        alert('Post ID: '+ response.id);}});
-and SECOND one using jQuery Post request and FormData
-}
+        var imgURL = 'http://media.zenfs.com/en-US/video/video.pd2upload.com/video.yahoofinance.com@fc01f40d-8f4e-3cbc-9d8f-a7b9e79d95fd_FULL.jpg' //your external photo url         FB.api('/photos', 'post', {
+            message: 'photo description',             access_token: your accesstoken              url: imgURL         }, function (response) {
+             if (!response || response.error) {
+                alert('Error occured:' + response);
+            }
+else {
+                alert('Post ID: ' + response.id);
+            }
+         });
 
 
  </script>
