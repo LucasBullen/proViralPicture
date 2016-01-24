@@ -6,15 +6,70 @@
 
 
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+</head>
 
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----...[Encrypted message]...-----END PKCS7-----">
+<body>
 
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+	<link rel="stylesheet" href="css/paynow.css" type="text/css">
+	<script type="text/javascript" src="js/jquery.paynow.min.js"></script>
 
-</form>
+	<button id="pn1" class="paynow-button"  
+        data-business="example@gmail.com"  
+        data-item_name="PayNow Plugin"  
+        data-amount="10"  
+        data-quantity="1"  
+        data-currency_code="USD">Buy Now  
+	</button>
+
+	<script type="text/javascript">  
+    $(document).ready(function(){  
+        $('#pn1').paynow({  
+            type: 'buynow',  
+            style: 'default'  
+        });  
+    });  
+	</script> 
+
+	<script type="text/javascript">  
+    $(document).ready(function(){  
+        $('.my-buttons').paynow({  
+            type: 'buynow',  
+            style: 'default'  
+        }, {business: 'my@domain.com'});  
+    });  
+</script> 
+
+<script type="text/javascript">  
+    $(document).ready(function(){  
+        $('#pn1').paynow({  
+            type: 'buynow',  
+            style: 'default',  
+            beforeSubmit: function(vars){  
+                if(document.cookie.indexOf('signed_in') != -1) {  
+                    vars['discount_amount'] = '1.5';  
+                }  
+                return vars;  
+            }  
+        });  
+    });  
+</script>  
+
+<script src="paypal-button.min.js?merchant=YOUR_MERCHANT_ID"
+    data-button="buynow"
+    data-name="My product"
+    data-amount="1.00"
+></script>
+
+  
+
+
+</body>
+</html>
 
 </body>
 </html>
